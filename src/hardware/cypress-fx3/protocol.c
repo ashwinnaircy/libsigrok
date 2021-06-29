@@ -727,11 +727,13 @@ SR_PRIV int cypress_fx3_start_acquisition(const struct sr_dev_inst *sdi)
 		devc->analog_buffer = g_try_malloc(
 			sizeof(float) * size / 2);
 	}
-	start_transfers(sdi);
+	
 	if ((ret = command_start_acquisition(sdi)) != SR_OK) {
 		cypress_fx3_abort_acquisition(devc);
 		return ret;
 	}
+
+	start_transfers(sdi);
 
 	return SR_OK;
 }
