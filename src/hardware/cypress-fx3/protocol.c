@@ -308,6 +308,8 @@ static void resubmit_transfer(struct libusb_transfer *transfer)
 {
 	int ret;
 
+	sr_spew("%s",__func__);
+
 	if ((ret = libusb_submit_transfer(transfer)) == LIBUSB_SUCCESS)
 		return;
 
@@ -481,8 +483,13 @@ check_trigger:
 		}
 	}
 
+	sr_spew("%s:devc->limit_samples=%d, final_frame=%d, devc->sent_samples = %d"
+	,__func__,devc->limit_samples,devc->limit_frames,devc->sent_samples);
+
 	const int frame_ended = devc->limit_samples && (devc->sent_samples >= devc->limit_samples);
 	const int final_frame = devc->limit_frames && (devc->num_frames >= (devc->limit_frames - 1));
+
+	sr_spew("%s:frame_ended=%d, final_frame=%d",__func__,frame_ended,final_frame);
 
 	if (frame_ended) {
 		devc->num_frames++;
